@@ -1,11 +1,9 @@
 targetScope = 'subscription'
 
-param resourceGroupName string = 'rg-learn-bicep-${location}'
-param location string = 'eastus2'
+param resourceGroupName string = 'org-jcetina-repo-learn-bicep-rg'
 
-resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' existing =  {
   name: resourceGroupName
-  location: location
 }
 
 module sa 'modules/storageAccount.bicep' = {
@@ -13,6 +11,6 @@ module sa 'modules/storageAccount.bicep' = {
   scope: rg
   params: {
     storageAccountName: 'sa${uniqueString(rg.id)}'
-    location: location
+    location: rg.location
   }
 }
