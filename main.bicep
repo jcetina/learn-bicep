@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
-param resourceGroupName string
-param location string
+param resourceGroupName string = 'rg-learn-bicep-${location}'
+param location string = 'eastus2'
 
 resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: resourceGroupName
