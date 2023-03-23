@@ -1,24 +1,18 @@
 targetScope = 'subscription'
 
-param location string = 'eastus'
-param resourceGroupName string = 'bicep-test-rg'
+param resourceGroupName string
+param location string
 
-module rg 'modules/resourceGroup.bicep' = {
-  scope: subscription()
-  name: 'rg-${uniqueString(subscription().subscriptionId)})}}'
-  params: {
-    location: location
-    resourceGroupName: resourceGroupName
-  }
+resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: resourceGroupName
+  location: location
 }
 
 module sa 'modules/storageAccount.bicep' = {
-  scope: resourceGroup(resourceGroupName)
-  name: 'sa-${uniqueString(resourceGroup().id)})}}'
+  name: 'sa${uniqueString(rg.id)}'
+  scope: rg
   params: {
+    storageAccountName: 'sa${uniqueString(rg.id)}'
     location: location
-    storageAccountName: 'biceptest${uniqueString(resourceGroup().id)})}}'
   }
 }
-
-
